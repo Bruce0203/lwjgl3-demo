@@ -2,8 +2,6 @@ name: publish
 on:
   workflow_dispatch:
 env:
-  MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-  MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
   GITHUB_REPOSITORY: ${{ github.repository }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GITHUB_BUILD_NUMBER: ${{github.run_number}}

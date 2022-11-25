@@ -105,11 +105,13 @@ publishing {
         maven {
             name = "GitHubPackages"
 
-            url = uri("https://maven.pkg.github.com/${System.getenv("GITHUB_REPOSITORY")}")
+            val repo = System.getenv("GITHUB_REPOSITORY")
+            if (repo === null) return@maven
+            val user = repo.substring(0, repo.indexOf("/"))
+            url = uri("https://maven.pkg.github.com/$repo")
             credentials {
-
-                username = System.getenv("MAVEN_USERNAME")
-                password = System.getenv("MAVEN_PASSWORD")
+                username = user
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }
