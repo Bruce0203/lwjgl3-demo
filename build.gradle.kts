@@ -3,13 +3,14 @@ val jomlVersion = "1.10.5"
 val lwjglNatives = "natives-macos"
 val kotlinVersion = "1.7.0"
 
+val GROUP_ID = "io.github.bruce0203"
+
 plugins {
     java
     `java-library`
     kotlin("jvm") version "1.7.0"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("com.vanniktech.maven.publish")version "0.22.0"
     application
+    id("maven-publish")
 }
 
 application {
@@ -97,4 +98,29 @@ dependencies {
     runtimeOnly("org.lwjgl", "lwjgl-yoga", classifier = lwjglNatives)
     runtimeOnly("org.lwjgl", "lwjgl-zstd", classifier = lwjglNatives)
     implementation("org.joml", "joml", jomlVersion)
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+
+            url = uri("https://maven.pkg.github.com/${System.getenv("GITHUB_REPOSITORY")}")
+            credentials {
+
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
+            }
+        }
+    }
+    publications {
+        register<MavenPublication>(project.name) {
+            groupId = GROUP_ID
+            artifactId = project.name
+            version = project.version.toString()
+//            artifact(tasks["jar"])
+            from(components["java"])
+        }
+    }
+
 }
